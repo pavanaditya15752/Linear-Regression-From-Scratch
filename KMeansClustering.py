@@ -2,10 +2,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from collections import Counter
 
-points= { 'blue' : [[2,4], [1,3], [2,3], [3,2], [1,2]],
-         'red' : [[5,6], [4,5], [4,6], [6,6], [5,4]]   }
+points = {
+    'blue': [[2, 4, 1], [1, 3, 2], [2, 3, 1], [3, 2, 2], [1, 2, 1]],
+    'red':  [[5, 6, 2], [4, 5, 3], [4, 6, 2], [6, 6, 3], [5, 4, 2]]
+}
 
-new_point =[4,5]
+new_point = [4, 5, 2]
+
 
 def euclidian_distance(p,q):
     return np.sqrt(np.sum((np.array(p)- np.array(q))**2)) #distance formula
@@ -35,32 +38,31 @@ cls.fit(points) #points assign
 print(cls.predict(new_point)) 
 
 
-ax=plt.subplot()
-# ax.grid(True, color='#323232')
-# ax.set_facecolor("black")
-# ax.figure.set_facecolor('#121212')
-ax.tick_params(axis='x', color='green')
-ax.tick_params(axis='y', color='green')
-            
-for point in points['blue']:
-    ax.scatter(point[0], point[1], color="#104DCA", s=60)
-    
-for point in points['red']:
-    ax.scatter(point[0], point[1], color="#FF0000", s=60)
-    
-new_class= cls.predict(new_point)
+from mpl_toolkits.mplot3d import Axes3D
 
-new_point_color="#FF0000" if new_class=="red" else "#104DCA"
-
-ax.scatter(new_point[0], new_point[1], color=new_point_color, s=200)
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
 
 for point in points['blue']:
-    ax.plot([new_point[0], point[0]], [new_point[1], point[1]], color="#104DCA")
+    ax.scatter(point[0], point[1], point[2], color="#104DCA", s=60)
+
+for point in points['red']:
+    ax.scatter(point[0], point[1], point[2], color="#FF0000", s=60)
+
+new_class = cls.predict(new_point)
+new_color = "#FF0000" if new_class == "red" else "#104DCA"
+
+ax.scatter(new_point[0], new_point[1], new_point[2], color=new_color, s=200)
+
+for point in points['blue']:
+    ax.plot([new_point[0], point[0]], [new_point[1], point[1]], [new_point[2], point[2]],color='#104DCA', linestyle="--")
     
 for point in points['red']:
-    ax.plot([new_point[0], point[0]], [new_point[1], point[1]], color="#FF0000")
-    
+    ax.plot([new_point[0], point[0]], [new_point[1], point[1]], [new_point[2], point[2]],color='#FF0000', linestyle="--")
 
-plt.show()   
+ax.set_xlabel("X")
+ax.set_ylabel("Y")
+ax.set_zlabel("Z")
 
+plt.show()
         
